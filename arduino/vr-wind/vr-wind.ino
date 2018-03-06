@@ -1,6 +1,6 @@
 /*
-	vr-wind
-	By Daniel Chote 2018
+  vr-wind
+  By Daniel Chote 2018
   https://github.com/dchote/vr-wind
 */
 
