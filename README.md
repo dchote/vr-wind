@@ -5,7 +5,7 @@ Arduino based DIY Wind implementation for Assetto Corsa &amp; other games.
 ![assembled3](images/IMG_4587.jpg "Assembled wind-vr on my motion rig")
 
 ## 3D printable parts
-In the stl directory are the stl files for the enclosure and the fan mounts. 
+In the [stl](stl/) directory are the stl files for the enclosure and the fan mounts. 
 You should may need a large format 3D printer to print some of these parts.
 
 
