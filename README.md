@@ -16,8 +16,8 @@ using pins 9 &amp; 10 for PWM output through some sort of darlington transistor 
 
 ![assembled2](images/IMG_4553.jpg "Assembled wind-vr controller")
 
-I used a pair of TIP142s that I already had. The wiring is very simple. Use a 1k (or so) current limiting resistor to the transistor emitter, 
-shared ground (negative) to your 12v or 24v supply, and the collector of the transistor goes to the negative input of your motor. 
+I used a pair of TIP142s that I already had. The wiring is very simple. Use a 1k (or so) current limiting resistor to the transistor base, 
+shared ground (negative) on the emitter, arduino ground, and to your 12v or 24v supply. The collector of the transistor goes to the negative input of your motor. 
 Positive on the motor goes directly to the positive supply.
 You MUST include a diode across your motor to deal with the backflow from the coil. 
 
