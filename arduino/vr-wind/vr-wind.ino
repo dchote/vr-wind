@@ -4,6 +4,8 @@
   https://github.com/dchote/vr-wind
 */
 
+#include <elapsedMillis.h>
+
 // Pins
 int leftFanPin = 9;
 int rightFanPin = 10;
@@ -11,6 +13,9 @@ int rightFanPin = 10;
 int fanAdjustPin = 0;
 
 // state
+elapsedMillis timeElapsed;
+int fanValueTimeout = 3000; // 3 second timeout
+
 int fanAdjustValue = 0;
 
 int minFanSpeed = 0;
@@ -29,6 +34,7 @@ void setup() {
   delay(500);
   
   Serial.println("vr-wind");
+  timeElapsed = 0;
   
   pinMode(leftFanPin, OUTPUT);
   pinMode(rightFanPin, OUTPUT);
@@ -45,7 +51,7 @@ void loop() {
     minFanSpeed = 0;
     maxFanSpeed = 0;
   } else {
-    if (fanAdjustValue < 128) {
+    if (fanAdjustValue < 240) {
       // allow fan to not spin if not needed
       minFanSpeed = 0;
     } else {
@@ -73,6 +79,8 @@ void loop() {
     rightFanValue = Serial.parseInt();
     
     if (Serial.read() == '\n') {
+      timeElapsed = 0;
+      /*
       Serial.print("Recieved: ");
       Serial.print(leftFanValue);
       Serial.print(" ");
@@ -82,9 +90,18 @@ void loop() {
       Serial.print(" Max: ");
       Serial.print(maxFanSpeed);
       Serial.println();
+      */
+      break;
     }
     
-    if (serialTimeout > 1000) break;
+    if (serialTimeout > 100) break;
+  }
+  
+  if ((leftFanValue > 0 || rightFanValue > 0) && timeElapsed > fanValueTimeout) {
+    //Serial.println("timeout");
+    leftFanValue = 0;
+    rightFanValue = 0;
+    timeElapsed = 0;
   }
   
   leftFanSpeed = map(leftFanValue, 0, 255, 0, maxFanSpeed);
@@ -94,11 +111,12 @@ void loop() {
   analogWrite(rightFanPin, rightFanSpeed);
   
   // debug print current values
+  /*
   Serial.print("Left Speed: ");
   Serial.print(leftFanSpeed);
   Serial.print(" Right Speed: ");
   Serial.print(rightFanSpeed);
   Serial.println();
-  
   delay(500);
+  */
 }
