@@ -19,7 +19,7 @@ using pins 9 &amp; 10 for PWM output through some sort of darlington transistor 
 I used a pair of TIP142s that I already had. The wiring is very simple. Use a 1k (or so) current limiting resistor to the transistor emitter, 
 shared ground (negative) to your 12v or 24v supply, and the collector of the transistor goes to the negative input of your motor. 
 Positive on the motor goes directly to the positive supply.
-You MUST include a backflow preventing diode across your motor. 
+You MUST include a diode across your motor to deal with the backflow from the coil. 
 
 You can read more about this configuration [here](http://www.instructables.com/id/Use-Arduino-with-TIP120-transistor-to-control-moto/).
 
