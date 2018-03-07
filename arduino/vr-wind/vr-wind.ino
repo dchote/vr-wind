@@ -5,8 +5,8 @@
 */
 
 // Pins
-int leftFanPin = 6;
-int rightFanPin = 5;
+int leftFanPin = 9;
+int rightFanPin = 10;
 
 int fanAdjustPin = 0;
 
@@ -24,16 +24,17 @@ int rightFanSpeed = 0;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("vr-wind");
+  Serial.println();
   
   delay(500);
   
-  // set PWM mode
-  TCCR0A = _BV(COM0A1) | _BV(COM0B1) | _BV(WGM00); 
-  TCCR0B = _BV(CS00); 
+  Serial.println("vr-wind");
   
   pinMode(leftFanPin, OUTPUT);
   pinMode(rightFanPin, OUTPUT);
+  
+  // set PWM mode
+  TCCR1B = TCCR1B & B11111000 | B00000001;
 }
 
 void loop() {
@@ -92,7 +93,6 @@ void loop() {
   analogWrite(leftFanPin, leftFanSpeed);
   analogWrite(rightFanPin, rightFanSpeed);
   
-  
   // debug print current values
   Serial.print("Left Speed: ");
   Serial.print(leftFanSpeed);
@@ -100,5 +100,5 @@ void loop() {
   Serial.print(rightFanSpeed);
   Serial.println();
   
-  delay(8000);
+  delay(500);
 }
