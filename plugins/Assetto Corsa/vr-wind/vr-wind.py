@@ -75,7 +75,7 @@ def acUpdate(deltaT):
         speed = str(round(ac.getCarState(0, acsys.CS.SpeedMPH)))
         # TODO implement acsys.CS.Steer to adjust left vs right speeds
         
-        # speed in MPH roughly matches what we want as a PWM value anyway, so just using that. 
+        # speed in MPH, we handle the speed states on the controller
         command = speed + " " + speed + "\n"
         serPort.write(command.encode())
         

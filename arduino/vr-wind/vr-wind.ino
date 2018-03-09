@@ -40,7 +40,7 @@ void setup() {
   pinMode(rightFanPin, OUTPUT);
   
   // set PWM mode
-  TCCR1B = TCCR1B & B11111000 | B00000001;
+  TCCR1B = (TCCR1B & 0b11111000) | 0x01;
 }
 
 void loop() {
@@ -51,23 +51,15 @@ void loop() {
     minFanSpeed = 0;
     maxFanSpeed = 0;
   } else {
-    if (fanAdjustValue < 240) {
+    if (fanAdjustValue < 250) {
       // allow fan to not spin if not needed
       minFanSpeed = 0;
     } else {
       // low fan idle speed
-      minFanSpeed = 20;
+      minFanSpeed = 15;
     }
-    // scale the adjustment
-    maxFanSpeed = 255 - map(fanAdjustValue, 0, 255, 215, 0);
-  }
-  
-  if (leftFanValue < minFanSpeed) {
-    leftFanValue = minFanSpeed;
-  }
-  
-  if (rightFanValue < minFanSpeed) {
-    rightFanValue = minFanSpeed;
+    
+    maxFanSpeed = 255;
   }
   
   int serialTimeout = 0;
@@ -97,15 +89,17 @@ void loop() {
     if (serialTimeout > 100) break;
   }
   
+  
   if ((leftFanValue > 0 || rightFanValue > 0) && timeElapsed > fanValueTimeout) {
     //Serial.println("timeout");
-    leftFanValue = 0;
-    rightFanValue = 0;
+    leftFanValue = minFanSpeed;
+    rightFanValue = minFanSpeed;
     timeElapsed = 0;
   }
   
-  leftFanSpeed = map(leftFanValue, 0, 255, 0, maxFanSpeed);
-  rightFanSpeed = map(rightFanValue, 0, 255, 0, maxFanSpeed);
+  // lets scale fan speed in to buckets, this is arbitrary based off what I felt seemed right.
+  leftFanSpeed = fanSpeedAdjust(calculateFanSpeed(leftFanValue));
+  rightFanSpeed = fanSpeedAdjust(calculateFanSpeed(rightFanValue));
   
   analogWrite(leftFanPin, leftFanSpeed);
   analogWrite(rightFanPin, rightFanSpeed);
@@ -117,6 +111,39 @@ void loop() {
   Serial.print(" Right Speed: ");
   Serial.print(rightFanSpeed);
   Serial.println();
+  
   delay(500);
   */
+}
+
+int calculateFanSpeed(int requestedValue) 
+{
+  if (requestedValue == 0) {
+    return 0;
+  } else if (requestedValue <= 50) {
+    return map(requestedValue, 0, 50, 10, 18);
+  } else if (requestedValue <= 100) {
+    return map(requestedValue, 50, 100, 18, 25);
+  } else if (requestedValue <= 150) {
+    return map(requestedValue, 100, 150, 25, 50);
+  } else {
+    return map(requestedValue, 150, 255, 50, 255);
+  }
+}
+
+int fanSpeedAdjust(int requestedSpeed)
+{
+  float adjustment = (float)fanAdjustValue / 255;
+  
+  requestedSpeed = round((float)requestedSpeed * adjustment);
+  
+  if (requestedSpeed < minFanSpeed) {
+    requestedSpeed = minFanSpeed;
+  }
+  
+  if (requestedSpeed > maxFanSpeed) {
+    requestedSpeed = maxFanSpeed;
+  }
+  
+  return requestedSpeed;
 }
