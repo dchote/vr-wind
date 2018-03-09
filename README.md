@@ -5,7 +5,7 @@ Arduino based DIY Wind implementation for Assetto Corsa &amp; other games.
 ![assembled3](images/IMG_4587.jpg "Assembled wind-vr on my motion rig")
 
 ## 3D printable parts
-In the stl directory are the stl files for the enclosure and the fan mounts. 
+In the [stl](stl/) directory are the stl files for the enclosure and the fan mounts. 
 You should may need a large format 3D printer to print some of these parts.
 
 
@@ -16,10 +16,10 @@ using pins 9 &amp; 10 for PWM output through some sort of darlington transistor 
 
 ![assembled2](images/IMG_4553.jpg "Assembled wind-vr controller")
 
-I used a pair of TIP142s that I already had. The wiring is very simple. Use a 1k (or so) current limiting resistor to the transistor emitter, 
-shared ground (negative) to your 12v or 24v supply, and the collector of the transistor goes to the negative input of your motor. 
+I used a pair of TIP142s that I already had. The wiring is very simple. Use a 1k (or so) current limiting resistor to the transistor base, 
+shared ground (negative) on the emitter, arduino ground, and to your 12v or 24v supply. The collector of the transistor goes to the negative input of your motor. 
 Positive on the motor goes directly to the positive supply.
-You MUST include a backflow preventing diode across your motor. 
+You MUST include a diode across your motor to deal with the backflow from the coil. 
 
 You can read more about this configuration [here](http://www.instructables.com/id/Use-Arduino-with-TIP120-transistor-to-control-moto/).
 
